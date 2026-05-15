@@ -1,0 +1,97 @@
+{
+  "Datasets": [
+    {
+      "Dataset": "gsm_responses",
+      "Dataset_Type": "gsm",
+      "Total_Records": 250,
+      "Evaluated_Reconstruction_Records": 250,
+      "Evaluated_Math_Records": 250,
+      "Compression": {
+        "Average_Original_Prompt_Tokens": 58.824,
+        "Average_Compressed_Prompt_Tokens": 29.06,
+        "Average_Compression_Rate": 0.494016047871617
+      },
+      "Reconstruction_Metrics": {
+        "Reconstruction_BLEU": 0.2640827201728484,
+        "Reconstruction_ROUGE_1_F": 0.5577410351760456,
+        "Reconstruction_ROUGE_1_P": 0.6534491549193825,
+        "Reconstruction_ROUGE_1_R": 0.5190778116029664,
+        "Reconstruction_ROUGE_2_F": 0.3558479767831947,
+        "Reconstruction_ROUGE_2_P": 0.41260601232149097,
+        "Reconstruction_ROUGE_2_R": 0.3306329197145669,
+        "Reconstruction_ROUGE_L_F": 0.5152434670152931,
+        "Reconstruction_ROUGE_L_P": 0.6064315630303032,
+        "Reconstruction_ROUGE_L_R": 0.47678420128105353,
+        "Reconstruction_BERTScore_P": 0.9440674185752869,
+        "Reconstruction_BERTScore_R": 0.9290658235549927,
+        "Reconstruction_BERTScore_F1": 0.9363144636154175
+      },
+      "Math_Metrics": {
+        "Exact_Match": 0.356,
+        "Average_Ratio_Difference": 0.6273453371402493,
+        "GT_vs_PromptResponse_Avg": 0.52,
+        "GT_vs_CompressedResponse_Avg": 0.256
+      },
+      "Partition_Dir": "analysis_results/gsm/partitions",
+      "BERTScore_Dir": "analysis_results/gsm",
+      "Stats_Dir": "analysis_results/gsm",
+      "Plots_Dir": "analysis_results/gsm/distribution_plots/prompt_vs_compressed"
+    },{
+      "Dataset": "sharegpt_responses",
+      "Dataset_Type": "summarization",
+      "Total_Records": 250,
+      "Evaluated_Records": 250,
+      "Compression": {
+        "Average_Original_Prompt_Tokens": 816.52,
+        "Average_Compressed_Prompt_Tokens": 387.008,
+        "Average_Compression_Rate": 0.47397246852495956
+      },
+      "Summary_Metrics": {
+        "Summary_BLEU": 0.23959913440486255,
+        "Summary_ROUGE_1_F": 0.5052959556874662,
+        "Summary_ROUGE_1_P": 0.521848317706915,
+        "Summary_ROUGE_1_R": 0.5025907550020199,
+        "Summary_ROUGE_2_F": 0.2797905747816301,
+        "Summary_ROUGE_2_P": 0.2899060766033073,
+        "Summary_ROUGE_2_R": 0.27573620460737924,
+        "Summary_ROUGE_L_F": 0.39216772554830837,
+        "Summary_ROUGE_L_P": 0.4053386411847957,
+        "Summary_ROUGE_L_R": 0.3904847913102693,
+        "Summary_BERTScore_P": 0.9113823175430298,
+        "Summary_BERTScore_R": 0.908652663230896,
+        "Summary_BERTScore_F1": 0.9098458290100098
+      },
+      "BERTScore_CSV": "analysis_results/sharegpt_responses/sharegpt_responses_bertscores.csv",
+      "BERTScore_Stats": "analysis_results/sharegpt_responses/sharegpt_responses_bertscore_statistics.json",
+      "BERTScore_Plots": "analysis_results/sharegpt_responses/distribution_plots/sharegpt_responses"
+    },{
+      "Dataset": "duc2004_responses",
+      "Dataset_Type": "summarization",
+      "Total_Records": 250,
+      "Evaluated_Records": 250,
+      "Compression": {
+        "Average_Original_Prompt_Tokens": 36.596,
+        "Average_Compressed_Prompt_Tokens": 16.948,
+        "Average_Compression_Rate": 0.46311072248333157
+      },
+      "Summary_Metrics": {
+        "Summary_BLEU": 0.2677910467943497,
+        "Summary_ROUGE_1_F": 0.5449491456433551,
+        "Summary_ROUGE_1_P": 0.5971399700684653,
+        "Summary_ROUGE_1_R": 0.5315159493152007,
+        "Summary_ROUGE_2_F": 0.3291080362161052,
+        "Summary_ROUGE_2_P": 0.36057288521272934,
+        "Summary_ROUGE_2_R": 0.31299546744930007,
+        "Summary_ROUGE_L_F": 0.5016360609833087,
+        "Summary_ROUGE_L_P": 0.5507190334509187,
+        "Summary_ROUGE_L_R": 0.488736628827957,
+        "Summary_BERTScore_P": 0.948945164680481,
+        "Summary_BERTScore_R": 0.9394330978393555,
+        "Summary_BERTScore_F1": 0.9440149664878845
+      },
+      "BERTScore_CSV": "analysis_results/duc2004_responses/duc2004_responses_bertscores.csv",
+      "BERTScore_Stats": "analysis_results/duc2004_responses/duc2004_responses_bertscore_statistics.json",
+      "BERTScore_Plots": "analysis_results/duc2004_responses/distribution_plots/duc2004_responses"
+    }
+  ]
+}
