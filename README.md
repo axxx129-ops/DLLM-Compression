@@ -53,7 +53,7 @@ DLLM-Compression/
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-org>/DLLM-Compression.git
+git clone https://github.com/axxx129-ops/DLLM-Compression
 cd DLLM-Compression
 ```
 
