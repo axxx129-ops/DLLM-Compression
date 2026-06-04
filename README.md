@@ -24,7 +24,7 @@ This work investigates the effectiveness of [LLMLingua-2](https://github.com/mic
 - Mathematical reasoning ([GSM8K](https://huggingface.co/datasets/openai/gsm8k))
 - Prompt reconstruction ([GSM8K](https://huggingface.co/datasets/openai/gsm8k))
 - Formal summarization ([DUC2004](https://duc.nist.gov/duc2004/))
-- Conversational summarization ([ShareGPT](https://huggingface.co/datasets/Lin-Chen/ShareGPT4V))
+- Conversational summarization ([ShareGPT](https://arxiv.org/abs/2311.12793))
 
 Our results show that high semantic preservation does not necessarily imply stable downstream reasoning performance in diffusion language models. While summarization remains relatively robust under prompt compression, mathematical reasoning degrades substantially despite strong semantic similarity scores.
 
