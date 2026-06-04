@@ -32,12 +32,14 @@ Our results show that high semantic preservation does not necessarily imply stab
 
 ```
 DLLM-Compression/
-├── notebooks/                  # Response-generation pipelines (run on Kaggle/Colab GPU)
-│   ├── llmlingua2_compression_pipeline.ipynb                 # original + compressed + reconstruction responses
-│   ├── llmlingua2_compression_reconstruction_pipeline.ipynb  # above, plus re-answering the reconstructed prompt
-│   └── llmlingua2_reconstruction_only.ipynb                  # reconstruction-focused variant
-├── evaluation/                 # Offline scoring of generated responses
-│   ├── gsm_evaluation.py        # BLEU/ROUGE/BERTScore, exact-match, stats, distribution plots
+├── notebooks/                  # Notebooks (run on Kaggle/Colab GPU)
+│   ├── llmlingua2_compress_prompts.ipynb                     # step 1: compress prompts with LLMLingua-2
+│   ├── llmlingua2_compression_pipeline.ipynb                 # step 2: original + compressed + reconstruction responses
+│   ├── llmlingua2_compression_reconstruction_pipeline.ipynb  # step 2 variant: also re-answers the reconstructed prompt
+│   └── llmlingua2_reconstruction_only.ipynb                  # step 2 variant: reconstruction-focused
+├── evaluation/                 # Offline scoring of generated responses (Python package)
+│   ├── evaluate.py              # CLI entry point: scores result JSONs into meta_results.json
+│   ├── gsm_evaluation.py        # BERTScore exports, sample partitioning, stats, distribution plots
 │   └── check_exact_match.py     # compares reconstructed vs. original GSM answers
 └── data/
     ├── meta_results.json        # aggregated metrics across all datasets
@@ -75,14 +77,20 @@ evaluation scripts in `evaluation/` run on CPU.
 
 ## Pipeline
 
-1. **Generate** — run a notebook in `notebooks/`. It loads a compression dataset
+1. **Compress** — `notebooks/llmlingua2_compress_prompts.ipynb` compresses the
+   source dataset prompts with LLMLingua-2.
+2. **Generate** — a notebook in `notebooks/` loads a compression dataset
    (GSM8K, ShareGPT, or DUC-2004), generates responses for the original,
    compressed, and reconstructed prompts, and writes a `*_responses.json` file.
-2. **Evaluate** — use the scripts in `evaluation/` to score those response files,
-   producing reconstruction-quality metrics (BLEU, ROUGE, BERTScore), GSM math
-   exact-match accuracy, and BERTScore distribution plots.
-3. **Summarize** — aggregated results across datasets are collected in
-   `data/meta_results.json`.
+3. **Evaluate** — run the evaluation package over those response files to compute
+   reconstruction-quality metrics (BLEU, ROUGE, BERTScore), GSM math exact-match
+   accuracy, and BERTScore distribution plots:
+
+   ```bash
+   python -m evaluation.evaluate data/responses/*.json -o data/meta_results.json
+   ```
+
+   Aggregated results across all datasets are collected in `data/meta_results.json`.
 
 ## Datasets
 

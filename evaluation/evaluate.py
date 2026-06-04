@@ -6,7 +6,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
-from gsm_evaluation import (
+from evaluation.gsm_evaluation import (
     compare_exact_numbers,
     export_bertscore_analysis,
     partition_gsm_samples,
@@ -285,10 +285,10 @@ def evaluate_gsm_records(
     ground_truths = []
     original_answers = []
     compressed_answers = []
-    
+
     # Track indices for partitioning
     math_indices = []
-    
+
     for idx, record in enumerate(records):
         prompt = as_text(record.get("prompt", ""))
         reconstruction = as_text(
@@ -346,8 +346,7 @@ def evaluate_gsm_records(
             compressed_answers,
         )
         math_metrics.update(number_metrics)
-    
-    
+
     result = {
         "Dataset": name,
         "Dataset_Type": "gsm",
@@ -358,11 +357,11 @@ def evaluate_gsm_records(
         "Reconstruction_Metrics": reconstruction_metrics,
         "Math_Metrics": math_metrics,
     }
-    
+
     # Generate extended outputs if output directory is specified
     if output_dir and ground_truths:
         output_dir = ensure_directory(output_dir)
-        
+
         # 1. Save partitioned samples
         print(f"\nPartitioning GSM samples...")
         categories = partition_gsm_samples(
@@ -372,11 +371,11 @@ def evaluate_gsm_records(
             compressed_answers,
             math_indices,
         )
-        
+
         partition_dir = ensure_directory(output_dir / "partitions")
         save_partitioned_samples(categories, partition_dir)
         result["Partition_Dir"] = str(partition_dir)
-        
+
         if include_bertscore and prompts and reconstructions:
             print(f"\nExporting BERTScore metrics for Prompt vs Reconstruction...")
             try:
@@ -398,7 +397,7 @@ def evaluate_gsm_records(
 
             except ImportError:
                 print("  bert-score not available; skipping BERTScore CSV export")
-    
+
     return result
 
 
@@ -408,21 +407,13 @@ def evaluate_summary_records(
     name: str,
     output_dir: Path | None = None,
 ) -> dict[str, Any]:
-
     prompt_responses = []
     compressed_responses = []
-
     indices = []
 
     for idx, record in enumerate(records):
-
-        prompt_response = as_text(
-            record.get("prompt_response", "")
-        )
-
-        compressed_response = as_text(
-            record.get("compressed_prompt_response", "")
-        )
+        prompt_response = as_text(record.get("prompt_response", ""))
+        compressed_response = as_text(record.get("compressed_prompt_response", ""))
 
         if prompt_response and compressed_response:
             prompt_responses.append(prompt_response)
@@ -430,12 +421,8 @@ def evaluate_summary_records(
             indices.append(idx)
 
     response_metrics = flatten_scores(
-        run_metrics(
-            prompt_responses,
-            compressed_responses,
-            include_bertscore
-        ),
-        "Summary"
+        run_metrics(prompt_responses, compressed_responses, include_bertscore),
+        "Summary",
     )
 
     result = {
@@ -448,9 +435,7 @@ def evaluate_summary_records(
     }
 
     if include_bertscore and output_dir and prompt_responses:
-
         output_dir = ensure_directory(output_dir / name)
-
         try:
             print(f"\nExporting BERTScore metrics for {name}...")
             bert_scores = run_bertscore(prompt_responses, compressed_responses)
@@ -470,10 +455,7 @@ def evaluate_summary_records(
             result["BERTScore_Plots"] = str(plot_dir)
 
         except ImportError:
-            print(
-                "bert-score not installed; "
-                "skipping BERTScore exports"
-            )
+            print("bert-score not installed; skipping BERTScore exports")
 
     return result
 
@@ -487,42 +469,34 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skip-bertscore", action="store_true")
     return parser.parse_args()
 
-def is_gsm_dataset(records: list[dict[str, Any]]) -> bool:
 
+def is_gsm_dataset(records: list[dict[str, Any]]) -> bool:
     if not records:
         return False
 
     sample = records[0]
-
     if "ground_truth" in sample:
         return True
-
     if "reconstruction_response" in sample:
         return True
 
     metadata = sample.get("metadata", {})
-
     if "answer" in metadata:
         return True
 
     return False
 
+
 def main() -> None:
-
     args = parse_args()
-
     datasets = []
 
     for path in args.inputs:
-
         records = load_records(path)
-
         name = dataset_name(path, records)
-
         include_bertscore = not args.skip_bertscore
 
         if is_gsm_dataset(records):
-
             # For GSM datasets, pass output directory for extended evaluation
             result = evaluate_gsm_records(
                 records,
@@ -530,30 +504,21 @@ def main() -> None:
                 name,
                 output_dir=args.gsm_output_dir,
             )
-
         else:
-
             result = evaluate_summary_records(
                 records,
                 include_bertscore,
                 name,
-                output_dir=args.summary_output_dir
+                output_dir=args.summary_output_dir,
             )
 
         datasets.append(result)
 
-    report = {
-        "Datasets": datasets,
-        #"Macro_Average": macro_average(datasets)
-    }
-
+    report = {"Datasets": datasets}
     rendered = json.dumps(report, indent=2)
 
     if args.output:
-        args.output.write_text(
-            rendered + "\n",
-            encoding="utf-8"
-        )
+        args.output.write_text(rendered + "\n", encoding="utf-8")
 
     print(rendered)
 
